@@ -38,21 +38,21 @@ db.once('open', ()=> {
     const changeStream = msgCollection.watch()
     console.log(changeStream)
 
-    // changeStream.on('change', (change) => {
-    //     console.log('A change occured', change);
+    changeStream.on('change', (change) => {
+        console.log('A change occured', change);
 
-    //     if(change.operationType === 'insert') {
-    //         const messageDetails = change.fullDocument;
-    //         pusher.trigger('messages', 'inserted', {
-    //             name: messageDetails.user,
-    //             message: messageDetails.message,
-    //             timestamp: messageDetails.timestamp,
-    //             received: messageDetails.received
-    //         })
-    //     } else {
-    //         console.log('Error triggering Pusher')
-    //     }
-    // })
+        if(change.operationType === 'insert') {
+            const messageDetails = change.fullDocument;
+            pusher.trigger('messages', 'inserted', {
+                name: messageDetails.user,
+                message: messageDetails.message,
+                timestamp: messageDetails.timestamp,
+                received: messageDetails.received
+            })
+        } else {
+            console.log('Error triggering Pusher')
+        }
+    })
 })
 
 // app routes
